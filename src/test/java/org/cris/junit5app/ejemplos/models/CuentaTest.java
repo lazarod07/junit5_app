@@ -109,4 +109,5 @@ class CuentaTest {
                 -> {assertTrue(banco.getCuentas().stream()
                 .anyMatch(c -> c.getPersona().equals("Frency")));});
     }
+
 }
