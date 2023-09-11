@@ -1,11 +1,15 @@
 package org.cris.junit5app.ejemplos.models;
 
+import org.cris.junit5app.ejemplos.exceptions.DineroInsuficienteException;
+
 import java.math.BigDecimal;
 
 public class Cuenta {
     private String persona;
 
     private BigDecimal saldo;
+
+    private Banco banco;
 
     public Cuenta(String persona, BigDecimal saldo) {
         this.saldo = saldo;
@@ -26,5 +30,39 @@ public class Cuenta {
 
     public void setSaldo(BigDecimal saldo) {
         this.saldo = saldo;
+    }
+
+    public void debito(BigDecimal monto){
+        BigDecimal nuevoSalso = this.saldo.subtract(monto);
+
+        if(nuevoSalso.compareTo(BigDecimal.ZERO) < 0){
+            throw new DineroInsuficienteException("Dinero Insuficiente");
+        }
+
+        this.saldo = nuevoSalso;
+    }
+
+    public void credito(BigDecimal monto){
+        this.saldo = this.saldo.add(monto);
+    }
+
+    public Banco getBanco() {
+        return banco;
+    }
+
+    public void setBanco(Banco banco) {
+        this.banco = banco;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(!(obj instanceof Cuenta)){
+            return false;
+        }
+        Cuenta c = (Cuenta) obj;
+        if(this.persona == null || this.saldo == null){
+            return false;
+        }
+        return this.persona.equals(c.getPersona()) && this.saldo.equals(c.getSaldo());
     }
 }
